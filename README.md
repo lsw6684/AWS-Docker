@@ -3,6 +3,13 @@
 - [서버 접속](#서버-접속)
 - [리눅스](#리눅스)
 - [Ubuntu](#ubuntu)
+- [VIM](#vim)
+- [Docker](#docker)
+    - [Docker Engine](#docker-engine)
+    - [Docker image](#docker-image)
+    - [Docker Internals](#docker-internals)
+    - [LXC](#lxc)
+- [Docker on Ubuntu](#docker-on-ubuntu)
 
 ### EC2
 Elastic Compute Cloud, 한 대의 컴퓨터를 임대합니다.
@@ -138,3 +145,72 @@ Elastic Compute Cloud, 한 대의 컴퓨터를 임대합니다.
 - `sudo apt-get install [패키지명]` : 패키지 설치.
 - `sudo apt-get remove [패키지명]` : 패키지 삭제(설정파일 제외).
 - `sudo apt-get --purge remove [패키지명]` : 패키지 삭제(설정파일 포함).
+
+## VIM
+Vi improved.
+- Vi : 전통적 유닉스 에디터, Visual Editor.
+- Vim : Vi에 자동화, 시각화를 추가한 프로그램입니다.
+- Vim 이외에 이맥스 (Emacs, GNU 프로젝트 설립자 리차드 스톨만이 개발) 라는 유명 에디터도 있습니다.
+
+### vim 네 가지 모드
+- 일반(명령) 모드 : 처음 vim을 실행했을 때 또는 입력모드/명령 모드에서 ESC 입력 시 - 찾기, 커서 이동 등.
+- 명령(명령행) 모드 : 일반 모드에서 `:` 입력 시 - 저장, 파일읽기, vim 설정 등
+- 입력(편집) 모드 : 일반 모드에서 a, i, o 입력 시 - 내용 입력
+- visual 모드 : 일반 모드에서 v입력 시 - 블럭 복사/붙이기
+
+## Docker
+### Docker Engine
+- Docker는 서버/클라이언트 구조로 이루어집니다.
+    - 서버는 docker daemon process 형태로 동작합니다.
+        - 데몬, 실행 중인 프로그램으로 이해(계속 떠있다고 생각).
+    - Docker daemon process에 요청하기 위해, 프로세스 간 통신 기법이 필요하며, Docker는 이를 위해 **Rest API**를 사용합니다.
+    - Docker command는 일종의 클라이언트입니다.
+        - Docker command를 내리면, 내부적으로 Rest API를 사용해서 docker daemon process를 호출합니다.
+
+### Docker image
+- Docker 컨테이너를 생성 목적의 명령들을 가진 템플릿입니다.
+- 여러 이미지들을 **layer**로 쌓아서, 원하는 형태의 이미지를 만드는 것이 일반적입니다.
+    - ex) ubuntu 이미지에, apache 웹서버 이미지를 얹어서, 웹서버 이미지를 만듭니다.
+### Docker container
+- docker image가 리눅스 컨테이너 형태로 실행한 상태(instance)를 의미합니다.
+- docker daemon에 있는 
+### Docker Internals
+docker는 리눅스 컨테이너부터 시작된 기술로 리눅스 커널에 [LXC](#lxc)기술을 사용하여 개별적 시스템이 동작하도록 합니다.
+
+### LXC
+Linux Containers로 단일 컴퓨팅 시스템에 설치된 리눅스 운영체제 상에서 다른 영역과 완전히 분리된 별도의 리눅스 시스템을 운영할 수 있는 리눅스 커널 기술입니다.
+> 다른 가상 시스템의 경우, 하드웨어 레벨에서 별도의 컴퓨터인 것처럼 분리해서 사용할 수 있는 기술이 있습니다. 이를 운영체제 레벨에서 사용하는 기술이라 생각하면 됩니다.
+
+> 초기 docker는 LXC 기술을 기반으로 구현되었으나 최근에는 별도 컨테이너 기술을 구현하여 사용합니다.
+
+## Docker on Ubuntu
+1. 최신 패키지 리스트 업데이트.
+    - `sudo apt update`
+2. docker를 위한 https 관련 패키지 설치.
+    - `sudo apt install apt-transport-https ca-certificates curl software-properites-common`
+3. docker repository 접근을 위한 GPG key 설정.
+    - `curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -`
+4. docker repository 등록.
+    - `sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"`
+5. 등록한 docker repository까지 포함하여 최신 패키지 리스트 업데이트.
+    - `sudo apt update`
+6. docker 설치.
+    - `sudo apt install docker-ce`
+7. docker 실행 중임을 확인.
+    - `sudo systemctl status docker`
+
+### sudo 명령어 없이 docker 명령어 사용
+1. 현 사용자(ubuntu) ID를 docker group에 포함.
+    - `sudo usermod -aG docker ${USER}`
+2. 터미널 재접속.
+3. 현 ID가 docker group에 포함되어 있는지 확인. (docker가 리스트에 나오면 OK)
+    - `id -nG`
+
+### docker-compose install
+1. release page에서 버전 확인 후 설치.
+    - `sudo curl -L "https://github.com/docker/compose/releases/download/1.28.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose`
+2. 실행 권한 주기
+    - `sudo chmod +x /usr/local/bin/docker-compose`
+3. 다음 명령 실행 시 버전 확인이 가능하면, 성공
+    - `docker-compose --version`
+
