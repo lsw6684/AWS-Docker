@@ -260,6 +260,20 @@ Linux Containers로 단일 컴퓨팅 시스템에 설치된 리눅스 운영체�
         - `-i`, 컨테이너 입력(STDIN)을 열어 놓는 옵션.
         - `-t`, tty(teletypewriter)는 리눅스(유닉스 계열)에서는 콘솔 또는 터미널을 의미합니다.
         - `docker run -it ubuntu`, ubuntu 패키지로 진입합니다.
-
-
-
+        - `--name`, 컨테이너 이름을 설정하는 옵션.
+        - `-d`, 컨테이너를 백그라운드에서 실행합니다.
+        - `--rm`, 컨테이너 종료 시 컨테이너를 자동으로 삭제합니다.
+        - `-p`, 호스트와 컨테이너 포트를 연결합니다. (NAPT, Network Address Port Translaction을 이용하여 port를 docker 컨테이너의 특정 Private IP 포트로 변환)
+        - `-v`, 호스트와 컨테이너 디렉토리를 연결합니다. (컨테이너 종료 시 데이터는 사라지기 때문에 호스트 PC상에 저장.)
+- 실행 중인 컨테이너 종료/중지
+    - `docker stop myubuntu`, 종료
+    - `docker pause`, 중지
+- 웹서버 docker run 옵션 테스트
+    - 웹서버는 크게 2가지가 사용됩니다.
+        - apache
+        - nginx (엔진엑스)
+- apache 웹서버 공식 docker
+    - `docker search httpd`, 일반적으로 각 docker마다 공식 이름이 프로그램명과 동일하지만, apache는 `httpd`를 사용합니다.
+    - `docker search httpd --limit-5`, 최대 5개 출력
+    - `docker run -d --name apacheweb httpd`, 이름 설정 후, 백그라운드로 실행
+    - `docker run -d -p 9999:80 --name apacheweb2 httpd`, 호스트 pc의 9999포트로 접속하여 apacheweb2의 컨테이너 내부 ip의 80번 포트로 포워딩 합니다.
