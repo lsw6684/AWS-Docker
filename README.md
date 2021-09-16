@@ -10,7 +10,7 @@
     - [Docker Internals](#docker-internals)
     - [LXC](#lxc)
 - [Docker on Ubuntu](#docker-on-ubuntu)
-
+- [FTP Solution](ftp-solution)
 ### EC2
 Elastic Compute Cloud, 한 대의 컴퓨터를 임대합니다.
 
@@ -277,3 +277,12 @@ Linux Containers로 단일 컴퓨팅 시스템에 설치된 리눅스 운영체�
     - `docker search httpd --limit-5`, 최대 5개 출력
     - `docker run -d --name apacheweb httpd`, 이름 설정 후, 백그라운드로 실행
     - `docker run -d -p 9999:80 --name apacheweb2 httpd`, 호스트 pc의 9999포트로 접속하여 apacheweb2의 컨테이너 내부 ip의 80번 포트로 포워딩 합니다.
+
+## FTP Solution
+FileZilla 사용, 로컬에 존재하는 파일을 서버로 업로드합니다.
+- 호스트(H) - 탄력적 IP
+- 키 파일(K) - .pem 파일.
+- 테스트, `-v` : 호스트와 컨테이너 디렉토리를 연결합니다. 
+    ```
+    docker run -d -p 9999:80 -v /home/ubuntu/2021_DEV_HTML:/usr/local/apache2/htdocs --name apacheweb2 httpd
+    ```
