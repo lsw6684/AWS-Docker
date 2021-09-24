@@ -10,7 +10,8 @@
     - [Docker Internals](#docker-internals)
     - [LXC](#lxc)
 - [Docker on Ubuntu](#docker-on-ubuntu)
-- [FTP Solution](ftp-solution)
+- [FTP Solution](#ftp-solution)
+- [docker와 alpine](#docker와-alpine)
 ### EC2
 Elastic Compute Cloud, 한 대의 컴퓨터를 임대합니다.
 
@@ -277,12 +278,22 @@ Linux Containers로 단일 컴퓨팅 시스템에 설치된 리눅스 운영체�
     - `docker search httpd --limit-5`, 최대 5개 출력
     - `docker run -d --name apacheweb httpd`, 이름 설정 후, 백그라운드로 실행
     - `docker run -d -p 9999:80 --name apacheweb2 httpd`, 호스트 pc의 9999포트로 접속하여 apacheweb2의 컨테이너 내부 ip의 80번 포트로 포워딩 합니다.
+- docker가 사용하고 있는 저장매체 현황 확인
+    - `docker system df`
+- 실행 중인 컨테이너 사용 리소스 확인
+    - `docker container stats`
 
 ## FTP Solution
 FileZilla 사용, 로컬에 존재하는 파일을 서버로 업로드합니다.
 - 호스트(H) - 탄력적 IP
 - 키 파일(K) - .pem 파일.
-- 테스트, `-v` : 호스트와 컨테이너 디렉토리를 연결합니다. 
+- 테스트, `-v` : ;호스트와 컨테이너 디렉토리를 연결합니다. 
     ```
     docker run -d -p 9999:80 -v /home/ubuntu/2021_DEV_HTML:/usr/local/apache2/htdocs --name apacheweb2 httpd
     ```
+
+## docker와 alpine
+- docker 이미지는 여러 개의 이미지가 계층(layer)으로 쌓인 형태로 작성 됩니다.
+    - e.g.) C 라이브러리 이미지를 쌓고, bash와 같은 shell 프로그램 이미지를 쌓고, 응용 프로그램 이미지를 쌓는 방식.
+    - 통상 리눅스 사용 시, 다양한 기능을 가진 ubuntu 등의 리눅스 패키지를 사용하지만, docker 컨테이너의 경우 특정 응용 프로그램 실행을 목적으로 하는 경우가 많기 때문에, 다양한 기능을 모두 포함할 필요가 없습니다.**(동일한 기능을 한다면, 도커 이미지/컨테이너 사이즈가 작으면 작을 수록 좋습니다.)**
+- 대부분의 docker 이미지에 가장 기본이 되는 이미지는 ubuntu가 아닌, **alpine**인 경우가 많습니다.
