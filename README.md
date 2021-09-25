@@ -282,7 +282,21 @@ Linux Containers로 단일 컴퓨팅 시스템에 설치된 리눅스 운영체�
     - `docker system df`
 - 실행 중인 컨테이너 사용 리소스 확인
     - `docker container stats`
-
+- 컨테이너 진입
+    - `docker exec 옵션 컨테이너_ID 명령 인자`
+    - `docker exec -it apacheweb2 /bin/sh`
+    - `-it`, docker run에서의 표준 입력(-i), 터미널(-t) 옵션.
+- 실행 중인 컨테이너 연결
+    - `-d`
+    - `docker run -itd -- name myubuntu3 ubuntu`
+- 모든 컨테이너 삭제
+    - `docker stop $(docker ps -a -q)`, 모든 컨테이너 중지
+    - `docker rm $(docker ps -a -q)`, 모든 컨테이너 삭제
+    - `-f`, 강제성 부여.
+        - `docker rm -f $(docker ps -a -q)`
+    - `docker container prune`, 정지된 컨테이너 삭제
+    - `docker image prune`, 실행 중인 컨테이너 image 외의 이미지 삭제
+    - `docker system prune`, 정지된 컨테이너, 실행 중인 컨테이너 이미지 외의 이미지, 볼륨, 네트워크 삭제
 ## FTP Solution
 FileZilla 사용, 로컬에 존재하는 파일을 서버로 업로드합니다.
 - 호스트(H) - 탄력적 IP
