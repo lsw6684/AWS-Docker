@@ -12,6 +12,7 @@
 - [Docker on Ubuntu](#docker-on-ubuntu)
 - [FTP Solution](#ftp-solution)
 - [docker와 alpine](#docker와-alpine)
+- [Dockerfile](#dockerfile)
 ### EC2
 Elastic Compute Cloud, 한 대의 컴퓨터를 임대합니다.
 
@@ -311,3 +312,22 @@ FileZilla 사용, 로컬에 존재하는 파일을 서버로 업로드합니다.
     - e.g.) C 라이브러리 이미지를 쌓고, bash와 같은 shell 프로그램 이미지를 쌓고, 응용 프로그램 이미지를 쌓는 방식.
     - 통상 리눅스 사용 시, 다양한 기능을 가진 ubuntu 등의 리눅스 패키지를 사용하지만, docker 컨테이너의 경우 특정 응용 프로그램 실행을 목적으로 하는 경우가 많기 때문에, 다양한 기능을 모두 포함할 필요가 없습니다.**(동일한 기능을 한다면, 도커 이미지/컨테이너 사이즈가 작으면 작을 수록 좋습니다.)**
 - 대부분의 docker 이미지에 가장 기본이 되는 이미지는 ubuntu가 아닌, **alpine**인 경우가 많습니다.
+
+## Dockerfile
+텍스트 파일 형식으로 Customized 이미지를 생성하는 데 사용됩니다. 소문자 작성이 문제가 되진 않지만 통상 구분을 위해 **대문자 작성**을 사용합니다.
+- `FROM`, 베이스 이미지 지정 명령
+    - `FROM httpd:alpine`
+- `LABEL`, 버전 정보, 작성자와 같은 이미지 설명을 작성하기 위한 명령
+    - `LABEL version="1.0.0"`
+- `CMD`, docker 컨테이너가 시작할 때, 실행하는 쉘 명령을 지정하는 명령. RUN과 비슷하지만, RUN은 이미지 작성 시 실행하는 명령이고 CMD는 컨테이너를 시작할 때 실행하는 명령입니다.
+    - `CMD ['python', 'app.py']`
+- `RUN`, 쉘 명령을 실행하는 명령으로 이미지 작성 시 실행 되며, 일종의 새로운 이미지 layer를 만듭니다.
+    - `RUN ["apt-get", 'install', 'nginx']`
+- `ENTRYPOINT`, docker 컨테이너가 시작할 때, 실행하는 쉘 명령을 지정하는 명령.
+    - docker run 커멘트 실행 시 별도 명령어도 넣을 수 있는데, 이 떄 CMD 명령은 해당 명령으로 덮어 씌워집니다. ENTRYPOINT로 지정한 명령은 docker run 커멘트 실행 시 함께 넣어진 별도 명령어가 있더라도, 덮어 씌어지지 않고 실행됩니다.
+- `EXPOSE`, docker 컨테이너 외부에 오픈할 포트 설정
+    - `EXPORT 8080`
+- `ENV`, docker 컨테이너 내부에서 사용할 환경 변수 지정
+    - `ENV PATH /usr/bin:$PATH`
+- `WORKDIR`, docker 컨테이너에서의 작업 디렉토리 설정
+- `COPY`, 파일 또는 디렉토리를 docker 컨테이너에 복사합니다. 
