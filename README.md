@@ -323,6 +323,7 @@ FileZilla 사용, 로컬에 존재하는 파일을 서버로 업로드합니다.
     - `CMD ['python', 'app.py']`
 - `RUN`, 쉘 명령을 실행하는 명령으로 이미지 작성 시 실행 되며, 일종의 새로운 이미지 layer를 만듭니다.
     - `RUN ["apt-get", 'install', 'nginx']`
+    - `-y`, `RUN apt-get install -y apache2`, 모두 *예* 선택.
 - `ENTRYPOINT`, docker 컨테이너가 시작할 때, 실행하는 쉘 명령을 지정하는 명령.
     - docker run 커멘트 실행 시 별도 명령어도 넣을 수 있는데, 이 떄 CMD 명령은 해당 명령으로 덮어 씌워집니다. ENTRYPOINT로 지정한 명령은 docker run 커멘트 실행 시 함께 넣어진 별도 명령어가 있더라도, 덮어 씌어지지 않고 실행됩니다.
 - `EXPOSE`, docker 컨테이너 외부에 오픈할 포트 설정
