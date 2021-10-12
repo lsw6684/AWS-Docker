@@ -242,6 +242,7 @@ Linux Containers로 단일 컴퓨팅 시스템에 설치된 리눅스 운영체�
     - 이미지ID가 겹치지 않는다면 일부만 작성해도 OK
     - `docker rmi 이미지ID or Repository명:TAG명`, rmi 명령
     - `docker image rm 이미지ID or Repository명:TAG명`
+    - `docker rmi $(docker images -a -q)`, 모든 이미지 삭제.
 
 - 컨테이너 생성
     - 각 이미지는 컨테이너로 만들어야 실행 가능합니다.
@@ -266,6 +267,7 @@ Linux Containers로 단일 컴퓨팅 시스템에 설치된 리눅스 운영체�
         - `-d`, 컨테이너를 백그라운드에서 실행합니다.
         - `--rm`, 컨테이너 종료 시 컨테이너를 자동으로 삭제합니다.
         - `-p`, 호스트와 컨테이너 포트를 연결합니다. (NAPT, Network Address Port Translaction을 이용하여 port를 docker 컨테이너의 특정 Private IP 포트로 변환)
+        - `-P`, (대문자)랜덤 포트를 매핑합니다.
         - `-v`, 호스트와 컨테이너 디렉토리를 연결합니다. (컨테이너 종료 시 데이터는 사라지기 때문에 호스트 PC상에 저장.)
 - 실행 중인 컨테이너 종료/중지
     - `docker stop myubuntu`, 종료
@@ -324,12 +326,21 @@ FileZilla 사용, 로컬에 존재하는 파일을 서버로 업로드합니다.
 - `RUN`, 쉘 명령을 실행하는 명령으로 이미지 작성 시 실행 되며, 일종의 새로운 이미지 layer를 만듭니다.
     - `RUN ["apt-get", 'install', 'nginx']`
     - `-y`, `RUN apt-get install -y apache2`, 모두 *예* 선택.
+
 - `ENTRYPOINT`, docker 컨테이너가 시작할 때, 실행하는 쉘 명령을 지정하는 명령.
     - docker run 커멘트 실행 시 별도 명령어도 넣을 수 있는데, 이 떄 CMD 명령은 해당 명령으로 덮어 씌워집니다. ENTRYPOINT로 지정한 명령은 docker run 커멘트 실행 시 함께 넣어진 별도 명령어가 있더라도, 덮어 씌어지지 않고 실행됩니다.
 - `EXPOSE`, docker 컨테이너 외부에 오픈할 포트 설정
     - `EXPORT 8080`
+    - `docker run -p`로 설정할 수도 있습니다.
+
 - `ENV`, docker 컨테이너 내부에서 사용할 환경 변수 지정
     - `ENV PATH /usr/bin:$PATH`
+    - 
+        ```
+        FROM mysql:latest
+        ENV MYSQL_ROOT_PASSWORD=password
+        ENV MYSQL_DATABSE=dbname 
+        ```
 - `WORKDIR`, docker 컨테이너에서의 작업 디렉토리 설정
 - `COPY`, 파일 또는 디렉토리를 docker 컨테이너에 복사합니다.
 - `#`, 주석
